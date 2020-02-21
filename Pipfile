@@ -6,7 +6,7 @@ verify_ssl = true
 [scripts]
 start = "python manage.py runserver"
 test = "python manage.py test -k"
-lint = "pylint --load-plugins pylint_django mealdelivery menumaker"
+lint = "pylint --load-plugins pylint_django mealdelivery"
 coverage = "coverage run manage.py test -k"
 autopep = "autopep8 -i -a -a"
 
