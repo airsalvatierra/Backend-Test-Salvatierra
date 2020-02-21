@@ -60,3 +60,7 @@ target/
 # enviroments
 .env
 .venv/
+
+# projects files
+mealdelivery/__pycache__/*
+mealdelivery/migrations/*
