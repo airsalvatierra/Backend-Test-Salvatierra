@@ -65,17 +65,6 @@ class Menu(models.Model):
         return "Menu - {}".format(self.menu_date.strftime('%m/%d/%Y'))
 
 
-# class MenuDetail(models.Model):
-#     menu = models.ForeignKey('Menu', on_delete=models.CASCADE,)
-#     option = models.CharField(max_length=250)
-#     # control fields
-#     created_at = models.DateTimeField(default=timezone.now)
-#     creation_user = models.CharField(max_length=250)
-#     last_modified = models.DateTimeField(null=True, blank=True)
-#     last_user_modified = models.CharField(
-#         max_length=250, blank=True, null=True)
-
-
 class MenuEmployee(models.Model):
     employee = models.CharField(max_length=50)
     menu_date = models.DateField('Menu Date')
