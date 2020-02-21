@@ -62,5 +62,6 @@ target/
 .venv/
 
 # projects files
+*.sqlite3
 mealdelivery/__pycache__/*
 mealdelivery/migrations/*
