@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 
+from comun.decorators import is_supervisor_or_redirect
 from .forms import MenuForm, UserForm, EmployeeForm, MenuEmployeeForm
 from .models import Menu, MenuEmployee
 
@@ -96,6 +97,7 @@ def change_password_mandatory(request):
 
 class CreateMenuView(View):
     @method_decorator(login_required(redirect_field_name=None))
+    @method_decorator(is_supervisor_or_redirect)
     def get(self, request):
         registered = False
 
@@ -109,6 +111,7 @@ class CreateMenuView(View):
         return render(request, 'mealdelivery/create_menu.html', context)
 
     @method_decorator(login_required(redirect_field_name=None))
+    @method_decorator(is_supervisor_or_redirect)
     def post(self, request):
         registered = False
 
@@ -127,6 +130,7 @@ class CreateMenuView(View):
 
 class ListMenusView(View):
     @method_decorator(login_required(redirect_field_name=None))
+    @method_decorator(is_supervisor_or_redirect)
     def get(self, request):
         menus = Menu.objects.filter()
 
@@ -138,6 +142,7 @@ class ListMenusView(View):
 
 class EditMenuView(View):
     @method_decorator(login_required(redirect_field_name=None))
+    @method_decorator(is_supervisor_or_redirect)
     def get(self, request, pk):
         menu = Menu.objects.get(pk=pk)
         form = MenuForm(instance=menu)
@@ -149,6 +154,7 @@ class EditMenuView(View):
         return render(request, 'mealdelivery/menu_update.html', context)
 
     @method_decorator(login_required(redirect_field_name=None))
+    @method_decorator(is_supervisor_or_redirect)
     def post(self, request, pk):
         menu = Menu.objects.get(pk=pk)
         form = MenuForm(request.POST, instance=menu)
@@ -167,6 +173,8 @@ class EditMenuView(View):
         return render(request, 'mealdelivery/menu_update.html', context)
 
 class CreateEmployeeView(View):
+    @method_decorator(login_required(redirect_field_name=None))
+    @method_decorator(is_supervisor_or_redirect)
     def get(self, request):
         userform = UserForm()
         employeeform = EmployeeForm()
@@ -178,6 +186,8 @@ class CreateEmployeeView(View):
 
         return render(request, 'mealdelivery/create_employee.html', context)
 
+    @method_decorator(login_required(redirect_field_name=None))
+    @method_decorator(is_supervisor_or_redirect)
     def post(self, request):
         userform = UserForm(request.POST or None)
         employeeform = EmployeeForm(request.POST or None)
@@ -278,6 +288,8 @@ def select_menu(request):
     return render(request, 'mealdelivery/select_menu.html', context)
 
 class MenuSelectedView(View):
+    @method_decorator(login_required(redirect_field_name=None))
+    @method_decorator(is_supervisor_or_redirect)
     def get(self, request):
         menus = MenuEmployee.objects.all()
 
@@ -285,4 +297,4 @@ class MenuSelectedView(View):
             'menus': menus,
         }
 
-        return render(request, 'mealdelivery/list_menus_selected.html', context)        
+        return render(request, 'mealdelivery/list_menus_selected.html', context)
