@@ -39,16 +39,19 @@
       <!-- Empieza Menu lateral izquierdo -->
       <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
         <!-- comienza block para inestar los links del menu lateral izquierdo -->
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Example Pages">
-          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseAdmin"
-            data-parent="#exampleAccordion">
-            <i class="fa fa-fw fa-file"></i>
-            <span class="nav-link-text">Admin</span>
-          </a>
-          <ul class="sidenav-second-level collapse" id="collapseAdmin">
-            <li><a href="{% url 'mealdelivery:new_employee' %}">Create Employee</a></li>
-          </ul>
-        </li>
+        {% show_supervisor_menus as supervisor_menus %}
+        {% if supervisor_menus %}
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Example Pages">
+            <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseAdmin"
+              data-parent="#exampleAccordion">
+              <i class="fa fa-fw fa-file"></i>
+              <span class="nav-link-text">Admin</span>
+            </a>
+            <ul class="sidenav-second-level collapse" id="collapseAdmin">
+              <li><a href="{% url 'mealdelivery:new_employee' %}">Create Employee</a></li>
+            </ul>
+          </li>
+        {% endif %}
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Example Pages">
           <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMenu"
             data-parent="#exampleAccordion">
@@ -56,10 +59,13 @@
             <span class="nav-link-text">Menus</span>
           </a>
           <ul class="sidenav-second-level collapse" id="collapseMenu">
-            <li><a href="{% url 'mealdelivery:new_menu' %}">Create Menu</a></li>
-            <li><a href="{% url 'mealdelivery:list_menus' %}">Menus</a></li>
+            {% if supervisor_menus %}
+              <li><a href="{% url 'mealdelivery:new_menu' %}">Create Menu</a></li>
+              <li><a href="{% url 'mealdelivery:list_menus' %}">Menus</a></li>
+              <li><a href="{% url 'mealdelivery:menus_selected' %}">Menus Selected</a></li>
+              <li><a href="{% url 'mealdelivery:menus_selected' %}">Send Reminder</a></li>
+            {% endif %}
             <li><a href="{% url 'mealdelivery:select_menu' %}">Select Menu</a></li>
-            <li><a href="{% url 'mealdelivery:menus_selected' %}">Menus Selected</a></li>
           </ul>         
         </li>
       </ul>
