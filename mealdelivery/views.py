@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth import (authenticate, login, logout,
                                  update_session_auth_hash)
 from django.contrib.auth.decorators import login_required
@@ -9,8 +11,8 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 
-from .forms import MenuForm
-from .models import Menu
+from .forms import MenuForm, UserForm, EmployeeForm, MenuEmployeeForm
+from .models import Menu, MenuEmployee
 
 # Login views
 
@@ -162,4 +164,125 @@ class EditMenuView(View):
             'form': form
         }
 
-        return render(request, 'mealdelivery/menu_update.html', context)        
+        return render(request, 'mealdelivery/menu_update.html', context)
+
+class CreateEmployeeView(View):
+    def get(self, request):
+        userform = UserForm()
+        employeeform = EmployeeForm()
+
+        context = {
+            'userform': userform,
+            'employeeform': employeeform
+        }
+
+        return render(request, 'mealdelivery/create_employee.html', context)
+
+    def post(self, request):
+        userform = UserForm(request.POST or None)
+        employeeform = EmployeeForm(request.POST or None)
+
+        if userform.is_valid() and employeeform.is_valid():
+            # create the user and the employee in the same time
+            email = userform.cleaned_data.get('email')
+            username = email.split('@')[0]
+            user = userform.save(commit=False)
+            user.username = username
+            user.set_password(username)
+            user.save()
+
+            employee = employeeform.save(commit=False)
+            employee.user = user
+            employee.save()
+
+            messages.success(request, 'Employee Created')
+
+            return redirect('home')
+
+        context = {
+            'userform': userform,
+            'employeeform': employeeform
+        }
+
+        return render(request, 'mealdelivery/create_employee.html', context)
+
+
+@login_required
+def select_menu(request):
+    # check the limit to choose pass 11am
+    today = datetime.now()
+    date_time = datetime(today.year, today.month, today.day, 11)
+
+    employee_menu = MenuEmployee.objects.filter(
+        employee=request.user.username,
+        menu_date=today
+    )
+
+    # if the employee already select the menu retur home
+    if employee_menu.exists():
+        messages.success(request, 'Yo already selected a menu for that day')
+        return redirect('home')
+
+    try:
+        menu = Menu.objects.get(menu_date=today)
+        # can_select = not today > date_time
+        can_select = True
+    except Menu.DoesNotExist:
+        can_select = False
+        form = MenuEmployeeForm()
+
+        context = {
+            'can_select': can_select,
+            'form': form,
+        }
+
+        return render(request, 'mealdelivery/select_menu.html', context)
+
+    # create choices from the existing menu
+    choices = [
+        (' ---------------------- ', ' ---------------------- '),
+        (menu.option1, menu.option1)
+    ]
+    if menu.option2:
+        choices.append((menu.option2, menu.option2))
+    if menu.option3:
+        choices.append((menu.option3, menu.option3))
+    if menu.option4:
+        choices.append((menu.option4, menu.option3))
+
+    form = MenuEmployeeForm(
+        request.POST or None,
+        choices=choices,
+        initial={
+            'menu_date': menu.menu_date,
+            'option_selected': choices,
+            'employee': request.user.username
+        }
+    )
+
+    if form.is_valid():
+        MenuEmployee.objects.create(
+            employee=request.user.username,
+            menu_date=form.cleaned_data.get('menu_date'),
+            option_selected=form.cleaned_data.get('option_selected'),
+            customization=form.cleaned_data.get('customization')
+        )
+        messages.success(request, 'Menu Selected')
+        return redirect('home')
+
+    context = {
+        'form': form,
+        'can_select': True,
+    }
+
+    return render(request, 'mealdelivery/select_menu.html', context)
+
+class MenuSelectedView(View):
+    def get(self, request):
+        menus = MenuEmployee.objects.all()
+
+        context = {
+            'menus': menus,
+        }
+
+        return render(request, 'mealdelivery/list_menus_selected.html', context)        
