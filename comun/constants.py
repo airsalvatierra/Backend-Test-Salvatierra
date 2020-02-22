@@ -5,3 +5,7 @@ COUNTRIES = (
     ('Peru', 'Peru'),
     ('Colombia', 'Colombia'),
 )
+
+ALLOW_VIEW_SELECTION = [
+    'nora',
+]
