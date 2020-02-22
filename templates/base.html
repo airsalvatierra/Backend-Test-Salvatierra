@@ -46,7 +46,7 @@
             <span class="nav-link-text">Admin</span>
           </a>
           <ul class="sidenav-second-level collapse" id="collapseAdmin">
-            <li><a href="{% url 'mealdelivery:newmenu' %}">Create Employee</a></li>
+            <li><a href="{% url 'mealdelivery:new_employee' %}">Create Employee</a></li>
           </ul>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Example Pages">
@@ -56,8 +56,10 @@
             <span class="nav-link-text">Menus</span>
           </a>
           <ul class="sidenav-second-level collapse" id="collapseMenu">
-            <li><a href="{% url 'mealdelivery:newmenu' %}">Create Menu</a></li>
+            <li><a href="{% url 'mealdelivery:new_menu' %}">Create Menu</a></li>
             <li><a href="{% url 'mealdelivery:list_menus' %}">Menus</a></li>
+            <li><a href="{% url 'mealdelivery:select_menu' %}">Select Menu</a></li>
+            <li><a href="{% url 'mealdelivery:menus_selected' %}">Menus Selected</a></li>
           </ul>         
         </li>
       </ul>
