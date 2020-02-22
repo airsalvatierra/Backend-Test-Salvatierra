@@ -9,18 +9,20 @@ class MenuForm(forms.ModelForm):
         'class': 'form-control',
         'data-provide': 'datepicker',
         'data-date-language': 'en',
+        'autocomplete': 'off'
     }), label='Date', required=True)
 
     class Meta:
         model = Menu
         fields = ['menu_date', 'option1', 'option2', 'option3', 'option4']
 
-    def clean_menu_date(self):
-        menu_date = self.cleaned_data.get('menu_date')
-        menu = Menu.objects.filter(menu_date=menu_date).exists()
-        if menu:
-            raise forms.ValidationError(
-                "A menu already exist for this date")
+    def clean(self):
+        if not self.instance:
+            menu_date = self.cleaned_data.get('menu_date')
+            menu = Menu.objects.filter(menu_date=menu_date).exists()
+            if menu:
+                raise forms.ValidationError(
+                    "A menu already exist for this date")
 
 
 class UserForm(forms.ModelForm):
@@ -39,7 +41,7 @@ class UserForm(forms.ModelForm):
             'last_name',
             'is_superuser']
 
-    def clean_email(self):
+    def clean(self):
         mail = self.cleaned_data.get('email')
         mail = mail.split('@')[0]
         username = User.objects.filter(username=mail).exists()

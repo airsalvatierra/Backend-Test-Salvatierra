@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block bodyblock %}
+  <div class="card mb-3">
+   <div class="card-header">
+     <i class="fa fa-table"></i>Menus</div>
+   <div class="card-body">
+     <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+         <thead>
+           <tr>
+             <th>Date</th>
+             <th>Option 1</th>
+             <th>Option 1</th>
+             <th>Option 1</th>
+             <th>Option 1</th>
+           </tr>
+         </thead>
+         <tbody>
+           {% if menus %}
+            {% for menu in menus %}
+             <tr>
+               <td> <a href="{% url 'mealdelivery:edit_menu' pk=menu.pk %}">{{ menu.menu_date }}</a> </td>
+               <td>{{ menu.option1 }}</td>
+               <td>{% if menu.option2 %}{{menu.option2}}{% else %}-{% endif %}</td>
+               <td>{% if menu.option3 %}{{menu.option3}}{% else %}-{% endif %}</td>
+               <td>{% if menu.option4 %}{{menu.option4}}{% else %}-{% endif %}</td>
+             </tr>
+            {% endfor %}
+           {% else %}
+             <tr>
+               <p>No Menus</p>
+             </tr>
+           {% endif %}
+         </tbody>
+       </table>
+     </div>
+   </div>
+  </div>
+{% endblock %}

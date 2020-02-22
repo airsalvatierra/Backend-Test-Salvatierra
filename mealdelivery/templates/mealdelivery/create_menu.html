@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block bodyblock %}
+{% if registered %}
+<h1>A new menu has been created</h1>
+<hr>
+{% else %}
+{% if form.non_field_errors  %}
+<div class="alert alert-danger">
+  <strong>{{ form.non_field_errors }}</strong>
+</div>
+{% endif %}
+<form class="form-group" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <h5>Menu Creation</h5>
+  <div class="col-md-4 col-12">{{ form.menu_date|as_crispy_field  }}</div>
+  <div class="col-md-4 col-12">{{ form.option1|as_crispy_field   }}</div>
+  <div class="col-md-4 col-12">{{ form.option2|as_crispy_field   }}</div>
+  <div class="col-md-4 col-12">{{ form.option3|as_crispy_field   }}</div>
+  <div class="col-md-4 col-12">{{ form.option3|as_crispy_field   }}</div>
+  <input type="submit" class="btn btn-success" value="Submit"></input>
+</form>
+
+{% endif %}
+{% endblock %}

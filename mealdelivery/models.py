@@ -40,7 +40,7 @@ class Employee(models.Model):
 
 
 class Menu(models.Model):
-    menu_date = models.DateField('Menu Date')
+    menu_date = models.DateField('Menu Date', blank=True)
     uuid_url = models.UUIDField('UUID', default=uuid.uuid4, unique=True)
     option1 = models.CharField('Option 1', max_length=250)
     option2 = models.CharField(

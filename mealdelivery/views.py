@@ -4,12 +4,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render
-from django.views import View
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.views import View
 
 from .forms import MenuForm
+from .models import Menu
 
 # Login views
 
@@ -121,3 +122,44 @@ class CreateMenuView(View):
         }
 
         return render(request, 'mealdelivery/create_menu.html', context)
+
+class ListMenusView(View):
+    @method_decorator(login_required(redirect_field_name=None))
+    def get(self, request):
+        menus = Menu.objects.filter()
+
+        context = {
+            'menus': menus
+        }
+
+        return render(request, 'mealdelivery/list_menus.html', context)
+
+class EditMenuView(View):
+    @method_decorator(login_required(redirect_field_name=None))
+    def get(self, request, pk):
+        menu = Menu.objects.get(pk=pk)
+        form = MenuForm(instance=menu)
+
+        context = {
+            'form': form
+        }
+
+        return render(request, 'mealdelivery/menu_update.html', context)
+
+    @method_decorator(login_required(redirect_field_name=None))
+    def post(self, request, pk):
+        menu = Menu.objects.get(pk=pk)
+        form = MenuForm(request.POST, instance=menu)
+
+        if form.is_valid():
+            form.save()
+
+            messages.success(request, 'Menu updated')
+
+            return redirect('mealdelivery:list_menus')
+
+        context = {
+            'form': form
+        }
+
+        return render(request, 'mealdelivery/menu_update.html', context)        
