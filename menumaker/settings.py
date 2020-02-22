@@ -142,7 +142,6 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
@@ -152,3 +151,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     # '/var/www/static/',
 ]
+
+DATE_FORMAT = "M/d/Y"
+
+DATETIME_FORMAT = "M/d/Y - H:i:s"
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
