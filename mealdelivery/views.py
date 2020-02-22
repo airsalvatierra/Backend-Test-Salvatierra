@@ -9,7 +9,6 @@ from django.views import View
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
-from .models import Menu
 from .forms import MenuForm
 
 # Login views
@@ -36,16 +35,19 @@ class LoginView(View):
         print("Username: {} and password {}".format(username, password))
         return HttpResponse("Credenciales invalidas!")
 
+
 @login_required
 def home_page(request):
     if request.user.last_login is None:
         return HttpResponseRedirect(reverse('change_password2'))
     return render(request, 'index.html', {})
 
+
 @login_required
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('user_login'))
+
 
 @login_required
 def change_password(request):
@@ -61,7 +63,27 @@ def change_password(request):
         form = PasswordChangeForm(request.user)
 
     context = {
-        'form':form,
+        'form': form,
+    }
+
+    return render(request, 'change_password.html', context)
+
+
+def change_password_mandatory(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'You password has been changed!')
+            logout(request)
+        else:
+            messages.error(request, 'Please, correct the errors mentioned!')
+    else:
+        form = PasswordChangeForm(request.user)
+
+    context = {
+        'form': form,
     }
 
     return render(request, 'change_password.html', context)
