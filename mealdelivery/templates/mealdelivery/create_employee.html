@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block bodyblock %}
+{% if form.non_field_errors  %}
+<div class="alert alert-danger">
+  <strong>{{ form.non_field_errors }}</strong>
+</div>
+{% endif %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% if userform.errors %}
+    {% for field in userform %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in userform.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% if employeeform.errors %}
+    {% for field in employeeform %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in employeeform.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<form class="form-group" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <h5>Menu Creation</h5>
+  <div class="col-md-4 col-12">{{ userform.username|as_crispy_field  }}</div>
+  <div class="col-md-4 col-12">{{ userform.email|as_crispy_field  }}</div>
+  <div class="col-md-4 col-12">{{ userform.first_name|as_crispy_field   }}</div>
+  <div class="col-md-4 col-12">{{ userform.last_name|as_crispy_field   }}</div>
+  <div class="col-md-4 col-12">{{ userform.is_superuser|as_crispy_field   }}</div>
+  <div class="col-md-4 col-12">{{ employeeform.user|as_crispy_field   }}</div>
+  <div class="col-md-4 col-12">{{ employeeform.country|as_crispy_field   }}</div>
+  <div class="col-md-4 col-12">{{ employeeform.department|as_crispy_field   }}</div>
+  <div class="col-md-4 col-12">{{ employeeform.address|as_crispy_field   }}</div>
+  <input type="submit" class="btn btn-success" value="Submit"></input>
+</form>
+
+{% endblock %}

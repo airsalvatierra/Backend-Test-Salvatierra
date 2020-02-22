@@ -1,35 +1,35 @@
 {% extends "base.html" %}
 
-{% load static i18n %}
+{% load static %}
 
 {% block bodyblock %}
   <div class="card mb-3">
    <div class="card-header">
-     <i class="fa fa-table"></i>Log de cambio de los Socios</div>
+     <i class="fa fa-table"></i>Menus Selected</div>
    <div class="card-body">
      <div class="table-responsive">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
          <thead>
            <tr>
-             <th>Fecha Operacion</th>
-             <th>Rut</th>
-             <th>Operacion</th>
-             <th>Usuario que hizo el cambio</th>
+             <th>Employee</th>
+             <th>Menu Date</th>
+             <th>Option Selected</th>
+             <th>Customization</th>
            </tr>
          </thead>
          <tbody>
-           {% if logs %}
-            {% for log in logs %}
+           {% if menus %}
+            {% for menu in menus %}
              <tr>
-               <td>{{ log.fec_operacion }}</td>
-               <td>{{ log.rut }}</td>
-               <td>{{ log.operacion }}</td>
-               <td>{{ log.user_do }}</td>
+               <td>{{ menu.employee }}</td>
+               <td>{{ menu.menu_date }}</td>
+               <td>{{ menu.option_selected }}</td>
+               <td>{% if menu.customization %}{{menu.customization}}{% else %}-{% endif %}</td>
              </tr>
             {% endfor %}
            {% else %}
              <tr>
-               <p>Actualmente no existe log</p>
+               <p>No Menus Selected</p>
              </tr>
            {% endif %}
          </tbody>
