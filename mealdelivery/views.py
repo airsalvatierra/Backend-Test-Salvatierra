@@ -8,6 +8,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
+from django.conf import settings
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -241,8 +242,10 @@ def select_menu(request):
 
     try:
         menu = Menu.objects.get(menu_date=today)
-        # can_select = not today > date_time
-        can_select = True
+        if settings.DEBUG:
+            can_select = True
+        else:
+            can_select = not today > date_time
     except Menu.DoesNotExist:
         can_select = False
         form = MenuEmployeeForm()
@@ -316,13 +319,16 @@ class ReminderView(View):
     def get(self, request):
         today = datetime.now(tz)
         date_time = datetime(today.year, today.month, today.day, 11)
-        print('2', today)
 
         menu = Menu.objects.filter(menu_date=today).exists()
 
+        if settings.DEBUG:
+            exist = True
+        else:
+            exist = bool(menu and (not today > date_time))
+
         context = {
-            # 'exist': bool(menu and (not today > date_time)),
-            'exist': bool(menu),
+            'exist': exist,
             'today': today,
             'sended': False,
             'errors': None
