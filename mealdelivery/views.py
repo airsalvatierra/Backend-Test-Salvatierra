@@ -1,4 +1,5 @@
 from datetime import datetime
+import pytz
 
 from django.contrib.auth import (authenticate, login, logout,
                                  update_session_auth_hash)
@@ -17,6 +18,7 @@ from .forms import MenuForm, UserForm, EmployeeForm, MenuEmployeeForm
 from .models import Menu, MenuEmployee
 
 # Login views
+tz = pytz.timezone('America/Santiago')
 
 
 class LoginView(View):
@@ -129,6 +131,7 @@ class CreateMenuView(View):
 
         return render(request, 'mealdelivery/create_menu.html', context)
 
+
 class ListMenusView(View):
     @method_decorator(login_required(redirect_field_name=None))
     @method_decorator(is_supervisor_or_redirect)
@@ -140,6 +143,7 @@ class ListMenusView(View):
         }
 
         return render(request, 'mealdelivery/list_menus.html', context)
+
 
 class EditMenuView(View):
     @method_decorator(login_required(redirect_field_name=None))
@@ -172,6 +176,7 @@ class EditMenuView(View):
         }
 
         return render(request, 'mealdelivery/menu_update.html', context)
+
 
 class CreateEmployeeView(View):
     @method_decorator(login_required(redirect_field_name=None))
@@ -221,7 +226,7 @@ class CreateEmployeeView(View):
 @login_required
 def select_menu(request):
     # check the limit to choose pass 11am
-    today = datetime.now()
+    today = datetime.now(tz)
     date_time = datetime(today.year, today.month, today.day, 11)
 
     employee_menu = MenuEmployee.objects.filter(
@@ -288,6 +293,7 @@ def select_menu(request):
 
     return render(request, 'mealdelivery/select_menu.html', context)
 
+
 class MenuSelectedView(View):
     @method_decorator(login_required(redirect_field_name=None))
     @method_decorator(is_supervisor_or_redirect)
@@ -298,27 +304,38 @@ class MenuSelectedView(View):
             'menus': menus,
         }
 
-        return render(request, 'mealdelivery/list_menus_selected.html', context)
+        return render(
+            request,
+            'mealdelivery/list_menus_selected.html',
+            context)
 
-class SendReminderView(View):
+
+class ReminderView(View):
     @method_decorator(login_required(redirect_field_name=None))
     @method_decorator(is_supervisor_or_redirect)
     def get(self, request):
-        today = datetime.now()
+        today = datetime.now(tz)
         date_time = datetime(today.year, today.month, today.day, 11)
+        print('2', today)
 
         menu = Menu.objects.filter(menu_date=today).exists()
 
         context = {
-            'exist': bool(menu and (not today > date_time)),
+            # 'exist': bool(menu and (not today > date_time)),
+            'exist': bool(menu),
             'today': today,
-            'sended': False
+            'sended': False,
+            'errors': None
         }
 
         return render(request, 'mealdelivery/send_reminder.html', context)
 
-    def post(self, request):
-        today = datetime.now()
+
+class SendReminder(View):
+    @method_decorator(login_required(redirect_field_name=None))
+    @method_decorator(is_supervisor_or_redirect)
+    def get(self, request):
+        today = datetime.now(tz)
 
         message = get_slack_reminder_message(today)
         result = send_slack_reminder(message, country='Chile')
@@ -329,11 +346,22 @@ class SendReminderView(View):
             for message in result:
                 text += message
 
-
         context = {
+            'exist': False,
             'today': today,
             'sended': True,
             'errors': text
         }
 
-        return render(request, 'mealdelivery/send_reminder.html', context)        
+        return render(request, 'mealdelivery/send.html', context)
+
+
+class MenuUUIDView(View):
+    def get(self, request, uuid_url):
+        menu = Menu.objects.get(uuid_url=uuid_url)
+
+        context = {
+            'menu': menu,
+        }
+
+        return render(request, 'mealdelivery/menu_uuid.html', context)
