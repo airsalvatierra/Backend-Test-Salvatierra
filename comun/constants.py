@@ -8,4 +8,5 @@ COUNTRIES = (
 
 ALLOW_VIEW_SELECTION = [
     'nora',
+    'air.salvatierra'
 ]
