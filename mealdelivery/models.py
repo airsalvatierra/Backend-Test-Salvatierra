@@ -26,6 +26,7 @@ class Employee(models.Model):
     department = models.CharField(max_length=100, null=True, blank=True)
     country = models.CharField(max_length=100, choices=COUNTRIES)
     address = models.CharField(max_length=300, null=True, blank=True)
+    slack_id = models.CharField(max_length=50, null=True, blank=True)
     # control fields
     created_at = models.DateTimeField(default=timezone.now)
     creation_user = models.CharField(max_length=250)
