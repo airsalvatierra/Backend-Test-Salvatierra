@@ -20,13 +20,18 @@ from django.conf.urls.static import static
 from django.urls import include, path
 
 from mealdelivery.views import (home_page, user_logout, LoginView,
-                                change_password, change_password_mandatory)
+                                change_password, change_password_mandatory,
+                                MenuUUIDView)
 
 urlpatterns = [
     path(
         '',
         home_page,
         name='home'),
+    path(
+        'menu/<uuid:uuid_url>/',
+        MenuUUIDView.as_view(),
+        name='menu_uuid'),
     path(
         'admin/',
         admin.site.urls),
