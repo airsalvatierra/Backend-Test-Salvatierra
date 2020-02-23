@@ -3,7 +3,7 @@ from datetime import datetime
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import Employee, Menu, MenuEmployee
+from .models import Employee, Menu
 
 
 class MenuForm(forms.ModelForm):
