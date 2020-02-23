@@ -12,6 +12,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 
 from comun.decorators import is_supervisor_or_redirect
+from comun.utils import send_slack_reminder, get_slack_reminder_message
 from .forms import MenuForm, UserForm, EmployeeForm, MenuEmployeeForm
 from .models import Menu, MenuEmployee
 
@@ -298,3 +299,41 @@ class MenuSelectedView(View):
         }
 
         return render(request, 'mealdelivery/list_menus_selected.html', context)
+
+class SendReminderView(View):
+    @method_decorator(login_required(redirect_field_name=None))
+    @method_decorator(is_supervisor_or_redirect)
+    def get(self, request):
+        today = datetime.now()
+        date_time = datetime(today.year, today.month, today.day, 11)
+
+        menu = Menu.objects.filter(menu_date=today).exists()
+
+        context = {
+            'exist': bool(menu and (not today > date_time)),
+            'today': today,
+            'sended': False
+        }
+
+        return render(request, 'mealdelivery/send_reminder.html', context)
+
+    def post(self, request):
+        today = datetime.now()
+
+        message = get_slack_reminder_message(today)
+        result = send_slack_reminder(message, country='Chile')
+
+        # get employees that was unsuccesfull the reminder
+        text = None
+        if result != 'ok':
+            for message in result:
+                text += message
+
+
+        context = {
+            'today': today,
+            'sended': True,
+            'errors': text
+        }
+
+        return render(request, 'mealdelivery/send_reminder.html', context)        
