@@ -2,6 +2,8 @@ import os
 from datetime import datetime
 import pytz
 
+from celery.decorators import task
+from celery.utils.log import get_task_logger
 from django.contrib.auth.models import User
 from django.conf import settings
 import slack
@@ -10,6 +12,7 @@ from mealdelivery.models import Employee, Menu
 from .constants import ALLOW_VIEW_SELECTION
 
 tz = pytz.timezone('America/Santiago')
+logger = get_task_logger(__name__)
 
 
 def check_if_is_supervisor(username):
@@ -20,7 +23,9 @@ def check_if_is_supervisor(username):
     return user.username in ALLOW_VIEW_SELECTION
 
 
+@task(name="send_slack_reminder")
 def send_slack_reminder(message, country=None):
+    logger.info('Sending Reminders')
     # get employees
     if country:
         employees = Employee.objects.filter(country=country)
@@ -32,10 +37,16 @@ def send_slack_reminder(message, country=None):
     date_time = datetime(today.year, today.month, today.day, 10)
     client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
     errors = []
+
+    if settings.DEBUG:
+        time = 'in 30 seconds'
+    else:
+        time = datetime.timestamp(date_time)
+
     for employee in employees:
         response = client.reminders_add(
             user=employee.slack_id,
-            time=datetime.timestamp(date_time),
+            time=time,
             text=message
         )
         if not response['ok']:
