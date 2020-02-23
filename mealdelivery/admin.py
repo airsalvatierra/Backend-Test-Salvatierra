@@ -3,16 +3,24 @@ from .models import Menu, MenuEmployee, Employee
 
 
 class MenuAdmin(admin.ModelAdmin):
-    fields = ['menu_date', 'option1', 'option2', 'option3', 'option4']
+    fields = [
+        'menu_date',
+        'option1',
+        'option2',
+        'option3',
+        'option4',
+        'uuid_url']
     list_display = ['menu_date', 'option1', 'option2', 'option3', 'option4']
 
+
 class EmployeeAdmin(admin.ModelAdmin):
-    fields = ['user', 'department', 'country', 'address']
-    list_display = ['user', 'department', 'country', 'address']
+    fields = ['user', 'department', 'country', 'address', 'slack_id']
+    list_display = ['user', 'department', 'country', 'address', 'slack_id']
+
 
 class MenuEmployeeAdmin(admin.ModelAdmin):
-    fields = ['employee', 'menu_date', 'option_selected', 'customization']
-    list_display = ['employee', 'menu_date', 'option_selected']    
+    fields = ['employee', 'menu_date', 'option_selected', 'customization', ]
+    list_display = ['employee', 'menu_date', 'option_selected']
 
 
 # Register your models here.

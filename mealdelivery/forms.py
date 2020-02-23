@@ -71,7 +71,7 @@ class EmployeeForm(forms.ModelForm):
 
     class Meta:
         model = Employee
-        fields = ['user', 'department', 'country', 'address']
+        fields = ['user', 'department', 'country', 'address', 'slack_id']
 
 class MenuEmployeeForm(forms.Form):
     menu_date = forms.DateField(
