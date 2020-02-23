@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block bodyblock %}
+{% if sended %}
+  <h1>Reminder Sended</h1>
+  {% if errors %}
+    <h1>This employees cannot be sended the reminder</h1>
+    <h1>errors</h1>
+  {% endif %}
+  <hr>
+{% elif not exist %}
+  <h1>No Menu to send a reminder</h1>
+  <hr>
+{% else %}
+<a class="btn btn-info btn-fill btn-sm" href="{% url 'mealdelivery:send'%}" role="button">Send Reminder</a>
+
+{% endif %}
+{% endblock %}

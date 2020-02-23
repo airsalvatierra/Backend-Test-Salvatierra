@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block bodyblock %}
+    <div class="col-md-2 col-12">{{ menu.menu_date }}</div>
+    <div class="col-md-4 col-12">{{ menu.uuid_url }}</div>
+    <div class="col-md-2 col-12">{{ menu.option1 }}</div>
+    <div class="col-md-2 col-12">{% if menu.option2 %}{{menu.option2}}{% else %}-{% endif %}</div>
+    <div class="col-md-2 col-12">{% if menu.option3%}{{menu.option3}}{% else %}-{% endif %}</div>
+    <div class="col-md-2 col-12">{% if menu.option4%}{{menu.option4}}{% else %}-{% endif %}</div>
+    <a class="btn btn-info btn-fill btn-sm" href="{% url 'mealdelivery:select_menu'%}" role="button">Go To Select Menu</a>
+{% endblock %}
