@@ -19,9 +19,11 @@ pycodestyle = "*"
 coverage = "*"
 
 [packages]
+celery = "*"
 django = "==3.0.3"
 django-crispy-forms = "*"
 django-bootstrap4 = "*"
+redis = "*"
 slackclient = "*"
 
 [requires]
