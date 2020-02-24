@@ -36,7 +36,6 @@ def send_slack_reminder(message, country=None):
     today = datetime.now(tz)
     date_time = datetime(today.year, today.month, today.day, 10)
     client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
-    errors = []
 
     if settings.DEBUG:
         time = 'in 30 seconds'
@@ -50,10 +49,8 @@ def send_slack_reminder(message, country=None):
             text=message
         )
         if not response['ok']:
-            errors.append(employee.employee)
+            logger.info('Error in employee: %s', employee.employee)
 
-    if errors:
-        return errors
     return 'ok'
 
 
