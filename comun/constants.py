@@ -8,5 +8,6 @@ COUNTRIES = (
 
 ALLOW_VIEW_SELECTION = [
     'nora',
-    'air.salvatierra'
+    'air.salvatierra',
+    'angie' # for testing purposes
 ]
