@@ -12,6 +12,7 @@ def get_request(args):
     return None
 
 
+# if is not supervisor (nora) can't enter certain view
 def is_supervisor_or_redirect(function):
     def new_function(*args, **kwargs):
         request = get_request(args)

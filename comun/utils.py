@@ -23,6 +23,7 @@ def check_if_is_supervisor(username):
     return user.username in ALLOW_VIEW_SELECTION
 
 
+# send the slack reminder asynchronously...
 @task(name="send_slack_reminder")
 def send_slack_reminder(message, country=None):
     logger.info('Sending Reminders')
@@ -54,6 +55,7 @@ def send_slack_reminder(message, country=None):
     return 'ok'
 
 
+# construct the message for the slack reminder
 def get_slack_reminder_message(today):
     try:
         menu = Menu.objects.get(menu_date=today)

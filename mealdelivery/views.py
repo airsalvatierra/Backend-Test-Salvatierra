@@ -178,7 +178,7 @@ class EditMenuView(View):
 
         return render(request, 'mealdelivery/menu_update.html', context)
 
-
+# create user linked to an employee always
 class CreateEmployeeView(View):
     @method_decorator(login_required(redirect_field_name=None))
     @method_decorator(is_supervisor_or_redirect)
@@ -205,6 +205,7 @@ class CreateEmployeeView(View):
             username = email.split('@')[0]
             user = userform.save(commit=False)
             user.username = username
+            # initial password is the username
             user.set_password(username)
             user.save()
 
