@@ -28,7 +28,8 @@ class MenuForm(forms.ModelForm):
                 10)
             if menu_date < datetime.now():
                 raise forms.ValidationError(
-                    'You cannot create a menu for the pass, you have until 10am of today or pass that to create a menu')
+                    'You cannot create a menu for the pass, you have until '
+                    '10am of today or pass that to create a menu')
 
             menu = Menu.objects.filter(menu_date=menu_date).exists()
             if menu:
