@@ -1,0 +1,1 @@
+# Cornershop's Backend Test - Explanation - David Salvatierra
