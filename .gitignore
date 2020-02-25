@@ -66,3 +66,4 @@ target/
 mealdelivery/__pycache__/*
 mealdelivery/migrations/*
 celerybeat*
+.vscode
