@@ -17,6 +17,7 @@ pep8 = "*"
 autopep8 = "*"
 pycodestyle = "*"
 coverage = "*"
+freezegun = "==0.3.13"
 
 [packages]
 celery = "*"
