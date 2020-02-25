@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import sys
 
 from django.contrib.messages import constants as messages
 
@@ -164,3 +165,6 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'America/Santiago'
 CELERY_CONTENT_ENCODING = 'utf-8'
+
+if 'test' in sys.argv:
+    DATABASE_ENGINE = 'sqlite3'
