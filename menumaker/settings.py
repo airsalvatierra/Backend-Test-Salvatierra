@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # third-party
     'crispy_forms',
+    'bootstrap4',
     # own
     'mealdelivery',
 ]
