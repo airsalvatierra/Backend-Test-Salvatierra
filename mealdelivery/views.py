@@ -228,7 +228,7 @@ class CreateEmployeeView(View):
 def select_menu(request):
     # check the limit to choose pass 11am
     today = datetime.now(tz)
-    date_time = datetime(today.year, today.month, today.day, 11)
+    date_time = datetime(today.year, today.month, today.day, 11, tzinfo=tz)
 
     employee_menu = MenuEmployee.objects.filter(
         employee=request.user.username,
@@ -239,7 +239,6 @@ def select_menu(request):
     if employee_menu.exists():
         messages.success(request, 'Yo already selected a menu for that day')
         return redirect('home')
-
     try:
         menu = Menu.objects.get(menu_date=today)
         if settings.DEBUG:
