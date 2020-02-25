@@ -16,6 +16,7 @@ In this README file I explain my solution to the test
 - I put messages from the django message framework but I have some problems to make it to work all the time in development enviroment when I use redirect, I lacked time to have this working 100%
 - I leave a little script to create some users
 - I use Pipfile tom manage packages and virtual enviroment
+- I use coverage to run tests and see the coverage of the files
 - I think that I can do a lot of stuff better like handling the selection menu in a better way, or rendering the forms in the template better and other stuffs
 
 ## Final Thoughts 
