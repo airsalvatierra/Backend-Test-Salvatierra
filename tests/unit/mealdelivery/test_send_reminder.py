@@ -37,7 +37,7 @@ class SendReminderViewTest(TestCase):
 
     @freeze_time('2020-02-24')
     @patch('mealdelivery.views.send_slack_reminder')
-    def test_select_menu_get(self, mock):
+    def test_send_reminder_get(self, mock):
         mock.return_value = 'ok'
         request = self.factory.get(self.url)
         parsed_request = set_base_request(request, self.user)
